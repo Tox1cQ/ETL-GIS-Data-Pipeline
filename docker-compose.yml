@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+
+  # PostgreSQL + PostGIS
+  postgres:
+    image: postgis/postgis:17-3.5
+    container_name: postgres_assignment
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres-password
+      POSTGRES_DB: database_name
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  # PySpark + JupyterLab
+  pyspark-jupyter:
+    image: quay.io/jupyter/pyspark-notebook:latest
+    user: root
+    container_name: pyspark-jupyter
+    ports:
+      - "8888:8888"
+      - "4040:4040"
+    environment:
+      JUPYTER_PORT: 8888
+      SPARK_UI_PORT: 4040
+      GRANT_SUDO: "yes"
+    volumes:
+      - streaming_data:/data:rw
+    depends_on:
+      - postgres
+
+
+volumes:
+  postgres_data:
+  streaming_data:
