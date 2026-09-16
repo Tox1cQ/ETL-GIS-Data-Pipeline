@@ -1,1 +1,3 @@
-'Tu Ghar ja'
+alembic 
+numpy
+pandas
